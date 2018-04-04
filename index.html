@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+  <meta name="author" content="">
+	<title>我的购物车</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/modal.css">
+</head>
+<body>
+	<div id="app" v-cloak>
+		<div class="cart-title">
+			<span>购物车</span>
+		</div>
+		<div class="cart">
+			<div class="cart-header">
+				<ul>
+					<li>商品信息</li>
+					<li></li>
+					<li>商品金额</li>
+					<li>商品数量</li>
+					<li>总金额</li>
+					<li>编辑</li>
+				</ul>
+			</div>
+			<ul class="cart-list">
+				<li v-for="item in productList" class="cart-list-item" :class="{'checked-list': item.checked}">
+					<div class="cart-item">
+						<div class="chk">
+							<input type="checkbox" v-model="item.checked" @click="checkItem(item)">
+						</div>
+						<img class="item-pic" :src="item.productImg" :alt="item.productTitle" @mouseover="item.showFlag=true" @mouseleave="item.showFlag=false">
+						<img class="item-pic-zoom" v-if="item.showFlag" :src="item.productImgBig">
+						<div class="item-desrip">
+							<a class="item-title">{{ item.productTitle }}</a>
+							<div class="item-extra">
+								<dl v-if="item.parts.length">
+									<dt>赠品</dt>
+									<dd v-for="p in item.parts">
+										<span>{{ p.partName }}</span>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="item-info">
+						<dl v-if="item.productInfo.length">
+							<dd v-for="(el, index) in item.productInfo">
+								{{ el }}
+							</dd>
+						</dl>
+					</div>
+					<div class="item-price">{{ item.productPrice | chineseYuan }}</div>
+					<div class="item-quantity">
+						<a class="item-minus" :class="{'no-minus': item.productQuantity < 2}" href="javascript:;" @click="changeQuantity(item, -1)">-</a><input v-model="item.productQuantity" type="text" maxlength="2"><a class="item-plus" :class="{'no-plus': item.productQuantity > 98}" href="javascript:;" @click="changeQuantity(item, 1)">+</a>
+					</div>
+					<div class="item-sum">
+						{{ item.productQuantity * item.productPrice | chineseYuan }}
+					</div>
+					<div class="item-edit">
+						<a href="javascript:;">移入收藏夹</a>
+						<a href="javascript:;" @click="delConfirm(item)">删除</a>
+					</div>
+				</li>
+			</ul>
+			<div class="float-bar">
+				<div class="operations">
+					<input type="checkbox" name="check-all" v-model="checkAllFlag" @click="checkAll()">
+					<label for="check-all">全选</label>.
+
+					<a href="javascript:;">全选</a>
+					<a href="javascript:;">删除</a>
+					<a href="javascript:;">移入收藏夹</a>
+					<a href="javascript:;">分享</a>
+				</div>
+				<div class="btn-area">
+					<span class="price-sum">{{ totalMoney | chineseYuan() }}</span>
+					<a class="btn-settle" href="addr.html">结算</a>
+				</div>
+			</div>
+		</div>
+		<div class="modal" v-if="delFlag">
+			<a href="javascript:;" class="modal-close" @click="delFlag=false">
+				<span class="close"></span>
+			</a>
+			<p class="modal-msg">确定要删除该商品吗？</p>
+			<div>
+				<button @click="delItem(itemToDel)">确定</button>
+				<button @click="delFlag=false">关闭</button>
+			</div>
+		</div>
+		<div class="modal-overlay" v-if="delFlag" @click="delFlag=false">
+		</div>
+	</div>
+	<script src="js/lib/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
