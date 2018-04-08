@@ -6,6 +6,7 @@ let vm = new Vue({
 		productList: [],
 		checkAllFlag: false,
 		delFlag: false,
+		batchDelFlag: false,
 		itemToDel: null
 	},
 	computed: {
@@ -21,14 +22,6 @@ let vm = new Vue({
 		this.$nextTick(function() {
 			this.fetchData()
 		})
-		this.productList.forEach(item => {
-			if (typeof item.checked === 'undefined') {
-				this.$set(item, 'checked', false)
-			}
-			if (typeof item.showFlag === 'undefined') {
-				this.$set(item, 'showFlag', false)
-			}
-		})
 	},
 	filters: {
 		chineseYuan: function(value) {
@@ -40,10 +33,22 @@ let vm = new Vue({
 			axios.get('data/testData.json')
 				.then(response => {
 					this.productList = response.data.result.productList
+					this.init()
 				})
 				.catch(function(error) {
 					log(error)
 				})
+		},
+		// 在获取到数据后初始化，避免存在未注册的属性
+		init: function() {
+			this.productList.forEach(item => {
+				if (typeof item.checked === 'undefined') {
+					this.$set(item, 'checked', false)
+				}
+				if (typeof item.showFlag === 'undefined') {
+					this.$set(item, 'showFlag', false)
+				}
+			})
 		},
 		// 选中商品
 		checkItem: function(item) {
@@ -80,6 +85,23 @@ let vm = new Vue({
 		delItem: function(item) {
 			this.productList.splice(this.productList.indexOf(item), 1)
 			this.delFlag = false
+		},
+		// 确认批量删除商品
+		batchDelConfirm: function() {
+			this.batchDelFlag = true
+		},
+		// 批量删除商品
+		batchDel: function() {
+			for (var i = 0; i < this.productList.length; i++) {
+				let item = this.productList[i]
+				if (item.checked) {
+					this.productList.splice(this.productList.indexOf(item), 1)
+					// 注意：在for循环内使用数组splice方法的坑
+					// splice方法改变了原数组
+					i--
+				}
+			}
+			this.batchDelFlag = false
 		},
 		// 全选商品
 		checkAll: function() {

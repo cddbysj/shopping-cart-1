@@ -27,13 +27,21 @@
 				</ul>
 			</div>
 			<ul class="cart-list">
-				<li v-for="item in productList" class="cart-list-item" :class="{'checked-list': item.checked}">
+				<li v-for="item in productList" class="cart-list-item" :class="{'checked-list': item.checked}" :key="item.id">
 					<div class="cart-item">
 						<div class="chk">
 							<input type="checkbox" v-model="item.checked" @click="checkItem(item)">
 						</div>
 						<img class="item-pic" :src="item.productImg" :alt="item.productTitle" @mouseover="item.showFlag=true" @mouseleave="item.showFlag=false">
-						<img class="item-pic-zoom" v-if="item.showFlag" :src="item.productImgBig">
+						<div class="item-pic-zoom" v-show="item.showFlag">
+							<span class="arrow"></span>
+							<span class="arrow-overlay"></span>
+							<div class="box">
+								<a href="javascript:;">
+									<img :src="item.productImgBig">
+								</a>
+							</div>
+						</div>
 						<div class="item-desrip">
 							<a class="item-title">{{ item.productTitle }}</a>
 							<div class="item-extra">
@@ -69,10 +77,8 @@
 			<div class="float-bar">
 				<div class="operations">
 					<input type="checkbox" name="check-all" v-model="checkAllFlag" @click="checkAll()">
-					<label for="check-all">全选</label>.
-
-					<a href="javascript:;">全选</a>
-					<a href="javascript:;">删除</a>
+					<label for="check-all">全选</label>
+					<a href="javascript:;" @click="batchDelConfirm()">删除</a>
 					<a href="javascript:;">移入收藏夹</a>
 					<a href="javascript:;">分享</a>
 				</div>
@@ -86,13 +92,23 @@
 			<a href="javascript:;" class="modal-close" @click="delFlag=false">
 				<span class="close"></span>
 			</a>
-			<p class="modal-msg">确定要删除该商品吗？</p>
+			<p class="modal-msg">确认要删除该商品吗？</p>
 			<div>
 				<button @click="delItem(itemToDel)">确定</button>
 				<button @click="delFlag=false">关闭</button>
 			</div>
 		</div>
-		<div class="modal-overlay" v-if="delFlag" @click="delFlag=false">
+		<div class="modal" v-if="batchDelFlag">
+			<a href="javascript:;" class="modal-close" @click="batchDelFlag=false">
+				<span class="close"></span>
+			</a>
+			<p class="modal-msg">确认要删除这些商品吗？</p>
+			<div>
+				<button @click="batchDel()">确定</button>
+				<button @click="batchDelFlag=false">关闭</button>
+			</div>
+		</div>
+		<div class="modal-overlay" v-if="batchDelFlag" @click="batchDelFlag=false">
 		</div>
 	</div>
 	<script src="js/lib/vue.js"></script>
