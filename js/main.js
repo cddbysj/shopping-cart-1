@@ -37,9 +37,8 @@ let vm = new Vue({
 	},
 	methods: {
 		fetchData: function() {
-			axios.get('data/cartData.json')
+			axios.get('data/testData.json')
 				.then(response => {
-					log(response)
 					this.productList = response.data.result.productList
 				})
 				.catch(function(error) {
