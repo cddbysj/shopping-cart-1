@@ -82,9 +82,15 @@
 					<a href="javascript:;">移入收藏夹</a>
 					<a href="javascript:;">分享</a>
 				</div>
-				<div class="btn-area">
-					<span class="price-sum">{{ totalMoney | chineseYuan() }}</span>
-					<a class="btn-settle" href="addr.html">结算</a>
+				<div class="right-area-msg">
+					<span class="txt">已选商品</span>
+					<span class="txt highlight">{{ checkedItemNum }}</span>
+					<span class="txt">件</span>
+				</div>
+				<div class="right-area-btn">
+					<span class="txt">合计（不含运费）：</span>
+					<span class="txt highlight">{{ totalMoney | chineseYuan() }}</span>
+					<a class="txt btn-settle" :class="{'no-item': checkedItemNum===0 }" href="addr.html">结 算</a>
 				</div>
 			</div>
 		</div>
@@ -113,6 +119,6 @@
 	</div>
 	<script src="js/lib/vue.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script src="js/main.js"></script>
+	<script src="js/cart.js"></script>
 </body>
 </html>

@@ -1,0 +1,150 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	max-width: 1024px;
+	margin: auto;
+	font-size: 12px;
+	font-family: 'tahoma', 'arial', '宋体';
+}
+
+h2 {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+a {
+	text-decoration: none;
+	color: #cc9977;
+}
+
+.header {
+
+}
+
+.header .stepbar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 10px;
+	display: flex;
+	flex-flow: row nowrap;
+	list-style: none;
+}
+
+.header .stepbar li {
+	width: 140px;
+	height: 60px;
+	font-weight: 700;
+}
+
+.header .stepbar .step-name {
+	color: #888;
+}
+
+.header .stepbar .step-no {
+	display: flex;
+	width: 100%;
+	height: 45px;
+	color: #fff;
+	overflow: hidden;
+}
+
+.header .stepbar .step-no .layer-1 {
+	width: 100%;
+	height: 10px;
+	align-self: center;
+	background: #dcdcdc;
+	z-index: 1;
+}
+
+.header .stepbar .step-no .layer-2 {
+	position: absolute;
+	align-self: center;
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	border-radius: 50%;
+	background: #dcdcdc;
+	z-index: 2;
+	text-align: center;
+}
+
+.content {
+	margin-top: 100px;
+}
+
+.content .addr-list {
+	display: flex;
+	width: 1024px;
+	flex-flow: row wrap;
+	align-content: flex-start;
+}
+
+.content .addr {
+	flex: 0 0 25%;
+	vertical-align: top;
+	width: 237px !important;
+	cursor: pointer;
+	color: #666;
+	background: #fff;
+}
+
+.content .addr .inner {
+	margin: 0 10px 10px 0;
+	border: 2px #dedede solid;
+	padding: 10px;
+}
+
+.content .addr .inner:hover {
+	border: 2px #666 solid;
+}
+
+.content .addr .addr-hd {
+	width: 100%;
+	white-space: nowrap;
+	padding: 0 0 5px;
+	border-bottom: 1px #666 solid;
+}
+
+.content .addr .addr-hd .city {
+	font-weight: 700;
+	margin-right: 10px;
+}
+
+.content .addr .addr-bd {
+	width: 100%;
+	padding: 5px 0 0;
+}
+
+.content .addr .addr-toolbar {
+	padding: 5px 0 0;
+}
+
+.content .addr .addr-toolbar .modify {
+	color: #cc9977;
+	text-decoration: none;
+}
+
+.content .addr-def {
+
+}
+
+.content .addr-cur {
+
+}
+
+.content .addr-set {
+
+}
+
+.content .addr-operations {
+	display: flex;
+	justify-content: space-between;
+	margin: 0 0 20px;
+}
+
+.footer {
+
+}

@@ -6,10 +6,58 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
   <meta name="author" content="">
+  <link href="css/addr.css" rel="stylesheet">
 	<title>我的收货地址</title>
 </head>
 <body>
-	<h4>在此页面编辑你的收货信息</h4>
-	<p>待完成</p>
+	<div class="container">
+		<div class="header">
+			<div class="stepbar-box">
+				<ol class="stepbar">
+					<li v-for="s in stepbar">
+						<div class="step-name">{{ s.name }}</div>
+						<div class="step-no">
+							<div class="layer-1"></div>
+							<div class="layer-2">{{ s.no }}</div>
+						</div>
+					</li>
+				</ol>
+			</div>
+		</div>
+		<div class="content">
+			<h2>选择收货地址</h2>
+			<div class="addr-list">
+				<div class="addr" v-for="item in addrListShow">
+					<div class="inner">
+						<div class="addr-hd">
+							<span class="prov">{{ item.prov }}</span>
+							<span class="city">{{ item.city }}</span>
+							<span>（</span>
+							<span class="name">{{ item.name }}</span>
+							<span>收）</span>
+						</div>
+						<div class="addr-bd" title="">
+							<span class="dist">{{ item.dist }}</span>
+							<span class="town">{{	item.town	}}</span>
+							<span class="street">{{ item.street }}</span>
+							<span class="phone">{{ item.phone }}</span>
+						</div>
+						<div class="addr-toolbar">
+							<a class="modify" href="#" title="修改地址" @click="modifyAddr(item)">修改</a><!-- todo-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="addr-operations">
+				<a href="javascript:;" @click="showAllAddr()">显示全部地址</a>
+				<a href="javascript:;" @click="addAddr()">添加收货地址</a><!-- todo-->
+			</div>
+			<h2>确认订单信息</h2>
+			<div>待完成</div>
+		</div>
+		<div class="footer"></div>
+	</div>
+	<script src="js/lib/vue.js"></script>
+	<script src="js/addr.js"></script>
 </body>
 </html>

@@ -277,29 +277,30 @@ dl dd {
 	background: #e5e5e5;
 }
 
-.float-bar .operations {
-
-}
-
 .float-bar .operations a {
 	padding-left: 10px;
 }
 
-.float-bar .btn-area .price-sum {
+.float-bar .right-area-btn .no-item {
+	pointer-events: none;
+	background: #b0b0b0;
+}
+
+.float-bar .txt {
+	vertical-align: middle;
+}
+
+.float-bar .highlight {
 	font-size: x-large;
 	font-family: "Verdana";
 	color: #f40;
-	padding: 0 5px;
 }
 
-.float-bar .btn-area .btn-settle {
-	display: block;
-	float: right;
-	height: 50px;
-	padding: 0 20px;
-	font-size: x-large;
+.float-bar .btn-settle {
 	color: #fff;
 	background: #f40;
+	font-size: x-large;
+	padding: 10px 30px;
 }
 
 @media only screen and (max-width: 991px) {
