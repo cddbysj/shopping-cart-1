@@ -160,7 +160,7 @@ a {
 	color: #cc9977;
 	text-decoration: none;
 	border: 1px #cc9977 solid;
-	padding: 0 4px;
+	padding: 1px 4px;
 }
 
 .content .addr .addr-toolbar .edit:hover {

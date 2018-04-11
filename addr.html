@@ -49,8 +49,8 @@
 							<span class="phone">{{ item.phone }}</span>
 						</div>
 						<div class="addr-toolbar" v-show="item.isSeted">
-							<a class="edit" href="javascript:;" title="修改地址" @click="modifyAddr(item)">修改</a>
-							<a class="edit" href="javascript:;" title="删除地址" @click="readyDelAddr(item)">删除</a>
+							<a class="edit" href="javascript:;" title="修改地址" @click.stop="modifyAddr(item)">修改</a>
+							<a class="edit" href="javascript:;" title="删除地址" @click.stop="readyDelAddr(item)">删除</a>
 						</div>
 						<div class="addr-cur-marker" v-if="item.isSeted"></div>
 					</div>
