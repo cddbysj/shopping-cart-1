@@ -70,7 +70,7 @@
 					</div>
 					<div class="item-edit">
 						<a href="javascript:;">移入收藏夹</a>
-						<a href="javascript:;" @click="delConfirm(item)">删除</a>
+						<a href="javascript:;" @click="readyDelItem(item)">删除</a>
 					</div>
 				</li>
 			</ul>
@@ -78,7 +78,7 @@
 				<div class="operations">
 					<input type="checkbox" name="check-all" v-model="checkAllFlag" @click="checkAll()">
 					<label for="check-all">全选</label>
-					<a href="javascript:;" @click="batchDelConfirm()">删除</a>
+					<a href="javascript:;" @click="readyBatchDel()">删除</a>
 					<a href="javascript:;">移入收藏夹</a>
 					<a href="javascript:;">分享</a>
 				</div>
@@ -114,7 +114,7 @@
 				<button @click="batchDelFlag=false">关闭</button>
 			</div>
 		</div>
-		<div class="modal-overlay" v-if="batchDelFlag" @click="batchDelFlag=false">
+		<div class="modal-overlay" v-if="batchDelFlag || delFlag" @click="batchDelFlag=false">
 		</div>
 	</div>
 	<script src="js/lib/vue.js"></script>

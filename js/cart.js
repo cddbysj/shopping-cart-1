@@ -86,7 +86,7 @@ let vm = new Vue({
 			}
 		},
 		// 确认删除该商品
-		delConfirm: function(item) {
+		readyDelItem: function(item) {
 			this.delFlag = true
 			this.itemToDel = item
 		},
@@ -96,7 +96,7 @@ let vm = new Vue({
 			this.delFlag = false
 		},
 		// 确认批量删除商品
-		batchDelConfirm: function() {
+		readyBatchDel: function() {
 			this.batchDelFlag = true
 		},
 		// 批量删除商品

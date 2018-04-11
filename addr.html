@@ -7,19 +7,24 @@
 	<meta name="description" content="">
   <meta name="author" content="">
   <link href="css/addr.css" rel="stylesheet">
+  <link href="css/modal.css" rel="stylesheet">
 	<title>我的收货地址</title>
 </head>
 <body>
-	<div class="container">
+	<div class="container" v-cloak>
 		<div class="header">
 			<div class="logo"></div>
 			<div class="stepbar-box">
 				<ol class="stepbar">
-					<li v-for="s in stepbar">
+					<li v-for="(s, index) in stepbar">
 						<div class="step-name">{{ s.name }}</div>
 						<div class="step-no">
 							<div class="layer-1"></div>
-							<div class="layer-2">{{ s.no }}</div>
+							<div class="layer-2">
+								<span class="txt">{{ s.no }}</span>
+							</div>
+							<div class="first" v-if="index===0">
+							</div>
 						</div>
 					</li>
 				</ol>
@@ -29,7 +34,7 @@
 			<h2>选择收货地址</h2>
 			<div class="addr-list">
 				<div class="addr" v-for="item in addrListShow">
-					<div class="inner">
+					<div class="inner" :class="item.isSeted? 'addr-set':'addr-not-set'" @click="setAddr(item)">
 						<div class="addr-hd">
 							<span class="prov">{{ item.prov }}</span>
 							<span class="city">{{ item.city }}</span>
@@ -43,20 +48,71 @@
 							<span class="street">{{ item.street }}</span>
 							<span class="phone">{{ item.phone }}</span>
 						</div>
-						<div class="addr-toolbar">
-							<a class="modify" href="#" title="修改地址" @click="modifyAddr(item)">修改</a><!-- todo-->
+						<div class="addr-toolbar" v-show="item.isSeted">
+							<a class="edit" href="javascript:;" title="修改地址" @click="modifyAddr(item)">修改</a>
+							<a class="edit" href="javascript:;" title="删除地址" @click="readyDelAddr(item)">删除</a>
 						</div>
+						<div class="addr-cur-marker" v-if="item.isSeted"></div>
 					</div>
 				</div>
 			</div>
 			<div class="addr-operations">
 				<a href="javascript:;" @click="showAllAddr()">显示全部地址</a>
-				<a href="javascript:;" @click="addAddr()">添加收货地址</a><!-- todo-->
+				<a href="javascript:;" @click="readyAddAddr()">添加收货地址</a>
 			</div>
 			<h2>确认订单信息</h2>
 			<div>待完成</div>
 		</div>
 		<div class="footer"></div>
+		<div class="modal" v-if="addFlag">
+			<h3>添加地址</h3>
+			<div class="edit-area">
+				<div class="region">
+					<label for="region">所在地区</label>
+					<select>
+						<option v-for="r in regionList">{{ r.name }}</option>
+					</select>
+					<select>
+						<option></option>
+					</select>
+				</div>
+				<div class="detailed-addr">
+					<label for="detailed-addr">详细地址</label>
+					<textarea placeholder="建议您如实填写详细收货地址，例如街道名称，门牌号码，楼层和房间号等信息" required></textarea>
+				</div>
+				<div class="zip-code">
+					<label for="zip-code">邮政编码</label>
+					<input type="text" name="zip-code" placeholder="如果您不清楚该地区的邮政编码，请输入000000" required>
+				</div>
+				<div class="name">
+					<label for="name">收货人姓名</label>
+					<input type="text" name="name" required>
+				</div>
+				<div class="cellphone">
+					<label for="cellphone">手机号码</label>
+					<input type="phone" name="cellphone">
+				</div>
+				<div class="telephone">
+					<label for="telephone">电话号码</label>
+					<input type="phone" name="telephone">
+				</div>
+			</div>
+			<button>保存</button>
+		</div>
+		<div class="modal-overlay" v-if="addFlag" @click="addFlag=false"></div>
+
+		<div class="modal" v-if="delFlag">
+			<a href="javascript:;" class="modal-close" @click="delFlag=false">
+				<span class="close"></span>
+			</a>
+			<p class="modal-msg">确认要删除该地址吗？</p>
+			<div class="modal-close"></div>
+			<div>
+				<button @click="delAddr">确定</button>
+				<button @click="delFlag=false">取消</button>
+			</div>
+		</div>
+		<div class="modal-overlay" v-if="delFlag" @click="delFlag=false"></div>
 	</div>
 	<script src="js/lib/vue.js"></script>
 	<script src="js/addr.js"></script>
