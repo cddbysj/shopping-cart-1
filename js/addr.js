@@ -1,4 +1,3 @@
-const log = console.log.bind(console)
 const ADDR_DATA = {
 	"status": 0,
 	"msg": "",
@@ -125,6 +124,17 @@ const REGIONS = [
 		"name": "其他地区"
 	}
 ]
+const [provs, cities, dists] = [
+	CHINA_REGION.provs,
+	CHINA_REGION.cities,
+	CHINA_REGION.dists
+]
+const provNames = provs.map(item => item.name)
+const cityNames = cities.map(item => item.name)
+log(provNames)
+log(cityNames)
+
+
 const vm = new Vue({
 	el: '.container',
 	data: {
@@ -138,44 +148,44 @@ const vm = new Vue({
 		itemToDel: null,
 	},
 	computed: {
-		addrListShow: function() {
+		addrListShow: function () {
 			return this.addrList.slice(0, this.limitedNum)
 		}
 	},
-	mounted: function() {
-		this.$nextTick(function() {
+	mounted: function () {
+		this.$nextTick(function () {
 			this.init()
 		})
 	},
 	methods: {
-		init: function() {
+		init: function () {
 			this.addrList.forEach(item =>	this.$set(item, 'isSeted', false))
 		},
-		showAllAddr: function() {
+		showAllAddr: function () {
 			this.limitedNum = this.addrList.length
 		},
-		modifyAddr: function(item) {
+		modifyAddr: function (item) {
 			log(`id=${item.id}的地址被修改了`)
 		},
-		readyDelAddr: function(item) {
+		readyDelAddr: function (item) {
 			log(`准备删除一个地址`)
 			this.delFlag = true
 			this.itemToDel = item
 		},
-		delAddr: function() {
+		delAddr: function () {
 			log(`你删除了一个地址`)
 			this.addrList.splice(this.addrList.indexOf(this.itemToDel), 1)
 			this.delFlag = false
 		},
-		readyAddAddr: function() {
+		readyAddAddr: function () {
 			log(`准备添加一个地址`)
 			this.addFlag = true
 		},
-		addAddr: function() {
+		addAddr: function () {
 			log(`你添加了一个地址`)
 			this.addrList.push(item)
 		},
-		setAddr: function(item) {
+		setAddr: function (item) {
 			item.isSeted = !item.isSeted
 			this.addrList.forEach(_item => {
 				if (_item !== item) {
