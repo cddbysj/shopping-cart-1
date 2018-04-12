@@ -1,0 +1,38 @@
+.popup-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1001;
+	background: #000;
+	opacity: .5;
+}
+
+.popup {
+	position: fixed;
+	top: 20%;
+	left: 20%;
+	width: 60%;
+	border: 10px #ccc solid;
+	background: #e2e2e2;
+	z-index: 1002;
+	padding: 0 20px 10px;
+}
+
+.popup .edit-area {
+	display: flex;
+	flex-direction: column;
+}
+
+.popup .edit-area > div {
+	margin-bottom: 10px;
+}
+
+.popup .edit-area button {
+}
+
+textarea, input {
+	font-family: '宋体', 'Microsoft Yahei';
+	font-size: 12px;
+}

@@ -8,6 +8,7 @@
   <meta name="author" content="">
   <link href="css/addr.css" rel="stylesheet">
   <link href="css/modal.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/popup.css">
 	<title>我的收货地址</title>
 </head>
 <body>
@@ -46,7 +47,7 @@
 							<span class="dist">{{ item.dist }}</span>
 							<span class="town">{{	item.town	}}</span>
 							<span class="street">{{ item.street }}</span>
-							<span class="phone">{{ item.phone }}</span>
+							<span class="phone">{{ item.phone || item.telephone }}</span>
 						</div>
 						<div class="addr-toolbar" v-show="item.isSeted">
 							<a class="edit" href="javascript:;" title="修改地址" @click.stop="modifyAddr(item)">修改</a>
@@ -64,42 +65,37 @@
 			<div>待完成</div>
 		</div>
 		<div class="footer"></div>
-		<div class="modal" v-if="addFlag">
-			<h3>添加地址</h3>
+		<div class="popup" v-if="addFlag">
+			<h3>添加地址信息</h3>
 			<div class="edit-area">
 				<div class="region">
 					<label for="region">所在地区</label>
-					<select>
-						<option v-for="r in regionList">{{ r.name }}</option>
-					</select>
-					<select>
-						<option></option>
-					</select>
+					<addr-selector v-model="addrInfo"></addr-selector>
 				</div>
 				<div class="detailed-addr">
 					<label for="detailed-addr">详细地址</label>
-					<textarea placeholder="建议您如实填写详细收货地址，例如街道名称，门牌号码，楼层和房间号等信息" required></textarea>
+					<textarea v-model="street" cols="50" placeholder="建议您如实填写详细收货地址，例如街道名称，门牌号码，楼层和房间号等信息" required></textarea>
 				</div>
 				<div class="zip-code">
 					<label for="zip-code">邮政编码</label>
-					<input type="text" name="zip-code" placeholder="如果您不清楚该地区的邮政编码，请输入000000" required>
+					<input v-model="zipCode" type="text" width="100%" name="zip-code" placeholder="如果您不清楚该地区的邮政编码，请输入000000" required>
 				</div>
 				<div class="name">
 					<label for="name">收货人姓名</label>
-					<input type="text" name="name" required>
+					<input v-model="name" type="text" name="name" required>
 				</div>
-				<div class="cellphone">
-					<label for="cellphone">手机号码</label>
-					<input type="phone" name="cellphone">
+				<div class="phone">
+					<label for="phone">手机号码</label>
+					<input v-model="phone" type="phone" name="phone">
 				</div>
 				<div class="telephone">
 					<label for="telephone">电话号码</label>
-					<input type="phone" name="telephone">
+					<input v-model="telephone" type="phone" name="telephone">
 				</div>
+				<button @click="addAddr()">保存</button>
 			</div>
-			<button>保存</button>
 		</div>
-		<div class="modal-overlay" v-if="addFlag" @click="addFlag=false"></div>
+		<div class="popup-overlay" v-if="addFlag" @click="addFlag=false"></div>
 
 		<div class="modal" v-if="delFlag">
 			<a href="javascript:;" class="modal-close" @click="delFlag=false">

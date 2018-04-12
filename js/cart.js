@@ -1,5 +1,4 @@
-const log = console.log.bind(console)
-let vm = new Vue({
+new Vue({
 	el: '#app',
 	data: {
 		productList: [],
