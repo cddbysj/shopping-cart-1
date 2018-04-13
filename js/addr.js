@@ -1,81 +1,3 @@
-const ADDR_DATA = {
-	"status": 0,
-	"msg": "",
-	"result": {
-		"addrList": [
-			{
-				"id": 00001,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "海文",
-				"dist": "开福区",
-				"town": "清水塘",
-				"street": "清水塘街道迎宾路235号迎宾大厦2301室",
-				"phone": "18912345678"
-			},
-			{
-				"id": 00002,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "姜辰",
-				"dist": "岳麓区",
-				"town": "天顶",
-				"street": "麓云南路黄荆小区B38栋1号",
-				"phone": "18207420287"
-			},
-			{
-				"id": 00003,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "文泰来",
-				"dist": "开福区",
-				"town": "清水塘",
-				"street": "清水塘街道迎宾路235号迎宾大厦2303室",
-				"phone": "18912345678"
-			},
-			{
-				"id": 00004,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "张三",
-				"dist": "长沙县",
-				"town": "星沙",
-				"street": "漓湘路圣力华苑8栋1单元23楼",
-				"phone": "13512345678"
-			},
-			{
-				"id": 00005,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "李四",
-				"dist": "开福区",
-				"town": "东风路",
-				"street": "东风路街道砚瓦池社区新二村安置小区2栋",
-				"phone": "18912345678"
-			},
-			{
-				"id": 00006,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "王五",
-				"dist": "雨花区",
-				"town": "环保工业园",
-				"street": "正大轻科装备制造有限公司",
-				"phone": "18912345678"
-			},
-			{
-				"id": 00006,
-				"prov": "湖南省",
-				"city": "长沙市",
-				"name": "赵六",
-				"dist": "长沙县",
-				"town": "榔梨镇",
-				"street": "土岭社区八字槽门",
-				"phone": "13601010202"
-			}
-		]
-	}
-}
 const STEPBAR = [
 	{
 		no: '',
@@ -99,14 +21,6 @@ const STEPBAR = [
 	}
 ]
 
-const [provs, cities, dists] = [
-	CHINA_REGION.provs,
-	CHINA_REGION.cities,
-	CHINA_REGION.dists
-]
-const provNames = provs.map(item => item.name)
-const cityNames = cities.map(item => item.name)
-
 Vue.component('addr-selector', {
 	template: `
 		<div class="addr-selector">
@@ -125,19 +39,23 @@ Vue.component('addr-selector', {
 					{{ item.name }}
 				</option>
 			</select>
-			<div>{{ selectedAddr.prov }}-{{ selectedAddr.city }}-{{ selectedAddr.dist }}</div>
 		</div>
 	`,
 	data() {
 		return {
-			addr: CHINA_REGION,
+			addr: {},
 			selectedProv: 0,
 			selectedCity: 0,
 			selectedDist: 0,
-			provs: CHINA_REGION.provs,
-			cities: CHINA_REGION.cities,
-			dists: CHINA_REGION.dists
+			provs: 0,
+			cities: 0,
+			dists: 0
 		}
+	},
+	created() {
+		log(`收货地址编辑窗口实例开始创建`)
+		// 在触发DOM操作之前载入省市区数据
+		this.loadChineseRegion()
 	},
 	computed: {
 		selectedAddr() {
@@ -177,7 +95,36 @@ Vue.component('addr-selector', {
 		}
 	},
 	methods: {
+		loadChineseRegion() {
+			log(`开始载入中国省市区数据`)
+			axios.get('data/chineseRegion.json')
+				.then(response => {
+					log(`成功载入中国省市区数据`)
+					let json = response.data.result.chineseRegion
+					let formate = this.jsonProcessor(json)
 
+					this.provs = this.addr.provs = formate.provs
+					this.cities = this.addr.cities = formate.cities
+					this.dists = this.addr.dists = formate.dists
+
+					// 默认选中的省级区域：湖南省
+					this.setDefProv(this.provs[17])
+				})
+				.catch(error => log(error))
+		},
+		// 对中国省市区的json数据进行处理转化
+		jsonProcessor(data) {
+			log(`开始对中国省市区的json数据进行处理`)
+			return {
+				provs: data.filter(item => item.level === 1),
+				cities: data.filter(item => item.level === 2),
+				dists: data.filter(item => item.level === 3)
+			}
+		},
+		// 设置默认选中的省级地区
+		setDefProv(prov) {
+			this.selectedProv = prov
+		}
 	}
 })
 
@@ -185,12 +132,14 @@ const vm = new Vue({
 	el: '.container',
 	data: {
 		stepbar: STEPBAR,
-		addrList: ADDR_DATA.result.addrList,
+		usrAddrs: '',
 		limitedNum: 4,
 		addFlag: false,
 		delFlag: false,
 		itemToDel: 0,
-		// 从地址选择器组件获取的信息对象
+		// 用户所在省份，用来设置地址选择器的默认选中省份
+		usrProv: 0,
+		// 从地址选择器组件获取到的信息对象
 		addrInfo: 0,
 		street: '',
 		zipCode: 0,
@@ -199,10 +148,10 @@ const vm = new Vue({
 		telephone: 0,
 	},
 	computed: {
-		addrListShow: function () {
-			return this.addrList.slice(0, this.limitedNum)
+		usrAddrsShow: function () {
+			return this.usrAddrs.slice(0, this.limitedNum)
 		},
-		itemToAdd: function() {
+		itemToAdd: function () {
 			return {
 				prov: this.addrInfo.prov,
 				city: this.addrInfo.city,
@@ -215,17 +164,36 @@ const vm = new Vue({
 			}
 		}
 	},
+	created: function () {
+		log(`页面实例开始创建`)
+		// 在触发DOM操作并渲染页面之前
+		// 载入用户之前已经添加好的地址信息
+		this.loadUsrAddr()
+	},
 	mounted: function () {
-		this.$nextTick(function () {
-			this.init()
-		})
+
 	},
 	methods: {
 		init: function () {
-			this.addrList.forEach(item =>	this.$set(item, 'isSeted', false))
+			// Vue不能检测在vue实例化之后
+			// 添加到data中某一对象的属性
+			// 使用$set API可以让Vue检测到这一属性并保持响应性
+			this.usrAddrs.forEach(item =>	this.$set(item, 'isSeted', false))
+		},
+		loadUsrAddr() {
+			log(`开始载入用户收货地址数据`)
+			axios.get('data/usrAddrs.json')
+				.then(response => {
+					log(`成功载入用户收货地址数据`)
+					this.usrAddrs = response.data.result.usrAddrs
+					// 这里需要注意
+					// 确保在异步获取用户收货地址成功之后再添加属性
+					this.init()
+				})
+				.catch(error => log(`载入用户收货地址数据失败：${error}`))
 		},
 		showAllAddr: function () {
-			this.limitedNum = this.addrList.length
+			this.limitedNum = this.usrAddrs.length
 		},
 		modifyAddr: function (item) {
 			log(`id=${item.id}的地址被修改了`)
@@ -237,7 +205,10 @@ const vm = new Vue({
 		},
 		delAddr: function () {
 			log(`你删除了一个地址`)
-			this.addrList.splice(this.addrList.indexOf(this.itemToDel), 1)
+			this.usrAddrs.splice(this.usrAddrs.indexOf(this.itemToDel), 1)
+			// 这里还有一步未完成
+			// 删除地址之后需要发送新的地址信息到后台
+
 			this.delFlag = false
 		},
 		readyAddAddr: function () {
@@ -245,16 +216,31 @@ const vm = new Vue({
 			this.addFlag = true
 		},
 		addAddr: function () {
-			log(`你添加了一个地址`)	
+			log(`你添加了一个地址`)
 			log(this.itemToAdd)
 			this.$set(this.itemToAdd, 'isSeted', false)
-			this.addrList.push(this.itemToAdd)
+			this.usrAddrs.push(this.itemToAdd)
+			// 这里还有一步未完成
+			// 添加地址之后需要发送新的地址信息到后台
+			axios.post('data/usrAddrs.json', this.itemToAdd)
+				.then(response => log(response))
+				.catch(error => log(error))
 			this.showAllAddr()
 			this.addFlag = false
 		},
+		// 收货地址的输入表单验证
+		validateForm: function () {
+			log(`开始地址输入页面的表单验证`)
+		},
+		// 将用户输入的地址信息对象进行转换和格式化
+		// 以适当的格式保存在后台用户数据文件usrAddrs.json
+		// 这一步不知道在前端还是在后端实现更合适？
+		transformAddr: function (item) {
+			return 0
+		},
 		setAddr: function (item) {
 			item.isSeted = !item.isSeted
-			this.addrList.forEach(_item => {
+			this.usrAddrs.forEach(_item => {
 				if (_item !== item) {
 					_item.isSeted = false
 				}

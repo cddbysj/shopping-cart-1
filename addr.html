@@ -34,7 +34,7 @@
 		<div class="content">
 			<h2>选择收货地址</h2>
 			<div class="addr-list">
-				<div class="addr" v-for="item in addrListShow">
+				<div class="addr" v-for="item in usrAddrsShow">
 					<div class="inner" :class="item.isSeted? 'addr-set':'addr-not-set'" @click="setAddr(item)">
 						<div class="addr-hd">
 							<span class="prov">{{ item.prov }}</span>
@@ -111,8 +111,8 @@
 		<div class="modal-overlay" v-if="delFlag" @click="delFlag=false"></div>
 	</div>
 	<script src="js/lib/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="js/utils.js"></script>
-	<script src="js/prov.js"></script>
 	<script src="js/addr.js"></script>
 </body>
 </html>

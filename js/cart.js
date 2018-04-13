@@ -37,14 +37,12 @@ new Vue({
 	},
 	methods: {
 		fetchData: function() {
-			axios.get('data/testData.json')
+			axios.get('data/usrProducts.json')
 				.then(response => {
 					this.productList = response.data.result.productList
 					this.init()
 				})
-				.catch(function(error) {
-					log(error)
-				})
+				.catch(error => log(error))
 		},
 		// 在获取到数据后初始化，避免存在未注册的属性
 		init: function() {
