@@ -18,11 +18,23 @@
 	background: #e2e2e2;
 	z-index: 1002;
 	padding: 0 20px 10px;
+	font-family: 'tahoma','宋体';
 }
 
 .popup .edit-area {
 	display: flex;
-	flex-direction: column;
+	flex-flow: column;
+	margin: 0 auto;
+}
+
+.popup .edit-area label {
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+}
+
+.popup .edit-area textarea {
+	vertical-align: top;
 }
 
 .popup .edit-area > div {
@@ -32,7 +44,18 @@
 .popup .edit-area button {
 }
 
-textarea, input {
-	font-family: '宋体', 'Microsoft Yahei';
-	font-size: 12px;
+.popup .edit-area .region {
+	display: flex;
+}
+
+.popup .edit-area .comp {
+	margin-left: 4px;
+}
+
+.popup .edit-area input {
+	width: 240px;
+}
+
+.popup .edit-area .orange{
+	color: #f40;
 }

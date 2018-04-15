@@ -21,6 +21,7 @@ const STEPBAR = [
 	}
 ]
 
+// 地址选择器组件
 Vue.component('addr-selector', {
 	template: `
 		<div class="addr-selector">
@@ -52,8 +53,13 @@ Vue.component('addr-selector', {
 			dists: 0
 		}
 	},
+	props: {
+		usrProvName: [String]
+	},
 	created() {
 		log(`收货地址编辑窗口实例开始创建`)
+		log(`用户提前选择的默认省份:${this.usrProvName}`)
+		log(`this.usrProv = ${this.usrProv}`)
 		// 在触发DOM操作之前载入省市区数据
 		this.loadChineseRegion()
 	},
@@ -67,7 +73,7 @@ Vue.component('addr-selector', {
 		}
 	},
 	watch: {
-		// 通过监听器实现省市区选择三联动
+		// 通过侦听器实现省市区选择三联动
 		selectedProv(newProv, oldProv) {
 			if (newProv.prov === '71' || newProv.prov === '81' || newProv === '82') {
 				this.cities = [newProv]
@@ -107,8 +113,8 @@ Vue.component('addr-selector', {
 					this.cities = this.addr.cities = formate.cities
 					this.dists = this.addr.dists = formate.dists
 
-					// 默认选中的省级区域：湖南省
-					this.setDefProv(this.provs[17])
+					// 默认选中的省级区域
+					this.setDefProv()
 				})
 				.catch(error => log(error))
 		},
@@ -122,8 +128,14 @@ Vue.component('addr-selector', {
 			}
 		},
 		// 设置默认选中的省级地区
-		setDefProv(prov) {
-			this.selectedProv = prov
+		setDefProv() {
+			log(`开始设置默认省份`)
+			log(`this.provs = ${this.provs}`)
+			let p = this.provs.filter(item => 
+				item.name === this.usrProvName && item.level === 1)[0]
+			log(p.toString())
+			// log(`p.name = ${p.name}`)
+			this.selectedProv = p | this.provs[0]
 		}
 	}
 })
@@ -136,16 +148,14 @@ const vm = new Vue({
 		limitedNum: 4,
 		addFlag: false,
 		delFlag: false,
-		itemToDel: 0,
-		// 用户所在省份，用来设置地址选择器的默认选中省份
-		usrProv: 0,
-		// 从地址选择器组件获取到的信息对象
-		addrInfo: 0,
+		itemToDel: '',
+		usrProv: '',// 用户所在省份，用来设置地址选择器的默认选中省份
+		addrInfo: '',// 从地址选择器组件获取到的地址信息对象
 		street: '',
-		zipCode: 0,
+		zipCode: '',
 		name: '',
-		phone: 0,
-		telephone: 0,
+		phone: '',
+		telephone: '',
 	},
 	computed: {
 		usrAddrsShow: function () {
@@ -216,21 +226,23 @@ const vm = new Vue({
 			this.addFlag = true
 		},
 		addAddr: function () {
-			log(`你添加了一个地址`)
+			log(`开始添加一个地址`)
 			log(this.itemToAdd)
+			// 验证用户输入的地址信息
+			this.validateAddr()
 			this.$set(this.itemToAdd, 'isSeted', false)
 			this.usrAddrs.push(this.itemToAdd)
 			// 这里还有一步未完成
 			// 添加地址之后需要发送新的地址信息到后台
 			axios.post('data/usrAddrs.json', this.itemToAdd)
-				.then(response => log(response))
-				.catch(error => log(error))
+				.then(response => log(`成功发送添加的地址信息到后台:${response}`))
+				.catch(error => log(`发送添加的地址信息到后台失败:${error}`))
 			this.showAllAddr()
 			this.addFlag = false
 		},
 		// 收货地址的输入表单验证
-		validateForm: function () {
-			log(`开始地址输入页面的表单验证`)
+		validateAddr: function () {
+			log(`开始验证添加的地址信息`)
 		},
 		// 将用户输入的地址信息对象进行转换和格式化
 		// 以适当的格式保存在后台用户数据文件usrAddrs.json
