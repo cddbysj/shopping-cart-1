@@ -17,12 +17,8 @@
 			<div class="header-left">
 				<div class="logo"></div>
 				<div class="prov-select">
-					<label for="usr-prov">省份选择</label>
-					<select v-model="usrProv" name="usr-prov">
-						<option value="湖南省">湖南省</option>
-						<option value="湖北省">湖北省</option>
-						<option value="江苏省">江苏省</option>
-					</select>
+					<span>您的位置：</span>
+					<strong>{{ usrProv }}</strong>
 				</div>
 			</div>
 			<div class="stepbar-box">
@@ -78,38 +74,43 @@
 		<div class="popup" v-if="addFlag">
 			<h3>添加地址信息</h3>
 			<form class="edit-area" action="" method="post">
-				<div>
+				<p>
 					<label class="orange">新增地址</label>
 					<span>电话号码、手机号选填一项, 其余均为必填项</span>
-				</div>
-				<div class="region">
-					<label for="region">所在地区<i>*</i></label>
+				</p>
+				<p class="region">
+					<label for="region">所在地区<abbr title="必填项">*</abbr></label>
 					<!-- 这里的:usr-prov-name="usrProv"
 					将用户在收货地址页面选择的省份传递给了地址选择器组件 -->
 					<addr-selector v-model="addrInfo" :usr-prov-name="usrProv" class="comp">
 					</addr-selector>
-				</div>
-				<div class="detailed-addr">
-					<label for="detailed-addr">详细地址<i>*</i></label>
+				</p>
+				<p class="detailed-addr">
+					<label for="detailed-addr">详细地址<abbr title="必填项">*</abbr></label>
 					<textarea v-model="street" id="detailed-addr" cols="25" placeholder="建议您如实填写详细收货地址，例如街道名称，门牌号码，楼层和房间号等信息" required></textarea>
-				</div>
-				<div class="zip-code">
+				</p>
+				<p class="zip-code">
 					<label for="zip-code">邮政编码</label>
 					<input v-model="zipCode" id="zip-code" type="text" name="zip-code" placeholder="如您不清楚邮递区号，请填写000000">
-				</div>
-				<div class="name">
-					<label for="name">收货人姓名<i>*</i></label>
+				</p>
+				<p class="name">
+					<label for="name">收货人姓名<abbr title="必填项">*</abbr></label>
 					<input v-model="name" id="name" type="text" name="name" required>
-				</div>
-				<div class="phone">
-					<label for="phone">手机号码</label>
-					<input v-model="phone" id="phone" type="phone" name="phone">
-				</div>
-				<div class="telephone">
+				</p>
+				<p class="phone">
+					<label for="phone">手机号码<abbr title="必填项">*</abbr></label>
+					<input v-model="phone" id="phone" type="phone" name="phone" pattern="[0-9]{11}" required>
+				</p>
+				<p class="telephone">
 					<label for="telephone">电话号码</label>
 					<input v-model="telephone" id="telephone" type="phone" name="telephone">
-				</div>				
-				<button type="submit" @click="addAddr()">保存</button>
+				</p>
+				<p>
+					<!-- 实际项目中，这里应该是将数据提交至后端数据库处理，还未实现 -->
+					<button type="submit">提交至后端</button>
+					<!-- 这里先将数据提交至前端，简单实现下 -->
+					<button type="submit" @click="addAddr()">提交至前端</button>
+				</p>
 			</form>
 		</div>
 		<div class="popup-overlay" v-if="addFlag" @click="addFlag=false"></div>

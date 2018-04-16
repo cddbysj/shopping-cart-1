@@ -54,6 +54,7 @@ Vue.component('addr-selector', {
 		}
 	},
 	props: {
+		// 从父组件传递过来的数据
 		usrProvName: [String]
 	},
 	created() {
@@ -130,12 +131,11 @@ Vue.component('addr-selector', {
 		// 设置默认选中的省级地区
 		setDefProv() {
 			log(`开始设置默认省份`)
-			log(`this.provs = ${this.provs}`)
-			let p = this.provs.filter(item => 
-				item.name === this.usrProvName && item.level === 1)[0]
-			log(p.toString())
-			// log(`p.name = ${p.name}`)
-			this.selectedProv = p | this.provs[0]
+			this.provs.forEach(item => log(item.name))
+			let p = this.provs.filter(item =>
+				item.name == this.usrProvName && item.level === 1)[0]
+			log('p = ' + p)
+			this.selectedProv = p
 		}
 	}
 })
@@ -149,7 +149,10 @@ const vm = new Vue({
 		addFlag: false,
 		delFlag: false,
 		itemToDel: '',
-		usrProv: '',// 用户所在省份，用来设置地址选择器的默认选中省份
+		// 通过地址位置权限获取的用户所在省份
+		// 用来设置地址选择器的默认选中省份
+		// 这里暂时先硬编码设置为湖南
+		usrProv: '湖南省',
 		addrInfo: '',// 从地址选择器组件获取到的地址信息对象
 		street: '',
 		zipCode: '',
