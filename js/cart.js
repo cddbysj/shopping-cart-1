@@ -1,3 +1,4 @@
+const MAX_PRODUCT_QUANTITY = 99
 new Vue({
 	el: '#app',
 	data: {
@@ -76,8 +77,8 @@ new Vue({
 				}
 			} else {
 				item.productQuantity++
-				if (item.productQuantity > 99) {
-					item.productQuantity = 99
+				if (item.productQuantity > MAX_PRODUCT_QUANTITY) {
+					item.productQuantity = MAX_PRODUCT_QUANTITY
 				}
 			}
 		},
@@ -97,15 +98,7 @@ new Vue({
 		},
 		// 批量删除商品
 		batchDel: function() {
-			for (var i = 0; i < this.productList.length; i++) {
-				let item = this.productList[i]
-				if (item.checked) {
-					this.productList.splice(this.productList.indexOf(item), 1)
-					// 注意：在for循环内使用数组splice方法的坑
-					// splice方法改变了原数组
-					i--
-				}
-			}
+			this.productList = this.productList.filter(v => !v.checked)
 			this.batchDelFlag = false
 		},
 		// 全选商品
